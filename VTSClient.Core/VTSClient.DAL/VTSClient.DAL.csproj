@@ -37,6 +37,7 @@
     <Compile Include="Entities\Vacation.cs" />
     <Compile Include="IDbLocation.cs" />
     <Compile Include="Interfaces\IRepositoryVacation.cs" />
+    <Compile Include="Interfaces\ISqlRepositoryVacation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RepositoryVacation.cs" />
     <Compile Include="Repositories\SqlRepositoryVacation.cs" />

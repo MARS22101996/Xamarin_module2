@@ -11,7 +11,7 @@ using VTSClient.DAL.Interfaces;
 
 namespace VTSClient.DAL.Repositories
 {
-    public class SqlRepositoryVacation
+    public class SqlRepositoryVacation : ISqlRepositoryVacation
     {
         private readonly SQLiteConnection _context;
 
@@ -20,7 +20,7 @@ namespace VTSClient.DAL.Repositories
             _context = new SQLiteConnection(dbLocation.GetDatabasePath(DalSettings.DbName));
         }
 
-        public  IEnumerable<Vacation> GetAsync()
+        public  IEnumerable<Vacation> GetAll()
         {
             return _context.Table<Vacation>().ToList();
         }

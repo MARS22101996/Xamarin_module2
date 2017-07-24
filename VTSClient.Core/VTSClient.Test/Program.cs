@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Autofac;
+using VTSClient.BLL.Dto;
+using VTSClient.BLL.Interfaces;
 using VTSClient.DAL.Entities;
 using VTSClient.DAL.Interfaces;
 using VTSClient.DAL.Repositories;
@@ -13,52 +15,65 @@ namespace VTSClient.Test
     {
         private static ISqlRepositoryVacation repo;
 
+        private static IApiVacationService service;
+
         static void Main(string[] args)
         {
             ConsoleSetup.Initialize();
 
             repo = ConsoleSetup.Container.Resolve<ISqlRepositoryVacation>();
 
-            var testId = Guid.NewGuid();
+            service = ConsoleSetup.Container.Resolve<IApiVacationService>();
 
-            var newVacation = new Vacation
-            {
-                Id = testId,
-                CreateDate = DateTime.Now,
-                CreatedBy = "someone",
-                End = DateTime.Now.AddDays(2),
-                Start = DateTime.Now,
-                VacationStatus = 1,
-                VacationType = 1
-            };
+            GetAndShowVacations1();
 
-            repo.Create(newVacation);
+            //repo = ConsoleSetup.Container.Resolve<ISqlRepositoryVacation>();
 
-            var item = repo.GetById(newVacation.Id);
+            //var testId = Guid.NewGuid();
 
-            ShowVacation(item);
+            //var newVacation = new Vacation
+            //{
+            //    Id = testId,
+            //    CreateDate = DateTime.Now,
+            //    CreatedBy = "someone",
+            //    End = DateTime.Now.AddDays(2),
+            //    Start = DateTime.Now,
+            //    VacationStatus = 1,
+            //    VacationType = 1
+            //};
 
-            var vacations =  repo.GetAll();
+            //repo.Create(newVacation);
 
-            ShowVacations(vacations.ToList());
+            //var item = repo.GetById(newVacation.Id);
 
-            newVacation.VacationStatus = 2;
+            //ShowVacation(item);
 
-            repo.Update(newVacation);
+            //var vacations =  repo.GetAll();
 
-            vacations = repo.GetAll();
+            //ShowVacations(vacations.ToList());
 
-            ShowVacations(vacations.ToList());
+            //newVacation.VacationStatus = 2;
 
-            repo.Delete(newVacation.Id);
+            //repo.Update(newVacation);
 
-            vacations = repo.GetAll();
+            //vacations = repo.GetAll();
 
-            ShowVacations(vacations.ToList());
+            //ShowVacations(vacations.ToList());
+
+            //repo.Delete(newVacation.Id);
+
+            //vacations = repo.GetAll();
+
+            //ShowVacations(vacations.ToList());
 
             //GetAndShowVacations();
         }
 
+        private static async void GetAndShowVacations1()
+        {
+            var vacationDtos = await service.GetVacationAsync();
+            ShowVacationsDto(vacationDtos.ToList());
+        }
         private static async void GetAndShowVacations()
         {
             var repo = new ApiRepositoryVacation();
@@ -119,6 +134,21 @@ namespace VTSClient.Test
         }
 
         private static void ShowVacations(List<Vacation> vacations)
+        {
+            if (vacations == null) throw new ArgumentNullException(nameof(vacations));
+            Console.WriteLine("///////////");
+            foreach (var vacation in vacations)
+            {
+                Console.WriteLine($"Id {vacation.Id}" +
+                                  $"Created date: {vacation.CreateDate.ToString("dd.MM.yyyy")}," +
+                                  $" Created by: {vacation.CreatedBy}," +
+                                  $" Start:{vacation.Start:dd.MM.yyyy} , End {vacation.End:dd.MM.yyyy}, " +
+                                  $" Vacation status: {vacation.VacationStatus}," +
+                                  $" Vacation type: {vacation.VacationType}");
+            }
+        }
+
+        private static void ShowVacationsDto(List<VacationDto> vacations)
         {
             if (vacations == null) throw new ArgumentNullException(nameof(vacations));
             Console.WriteLine("///////////");

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
+using AutoMapper;
 using VTSClient.BLL.Dto;
 using VTSClient.BLL.Interfaces;
 using VTSClient.DAL.Entities;
@@ -13,19 +15,36 @@ namespace VTSClient.Test
 {
     class Program
     {
-        private static ISqlRepositoryVacation repo;
+        private static ISqlVacationService _serviceSql;
 
-        private static IApiVacationService service;
+        private static IApiVacationService _serviceApi;
 
         static void Main(string[] args)
         {
             ConsoleSetup.Initialize();
 
-            repo = ConsoleSetup.Container.Resolve<ISqlRepositoryVacation>();
+            _serviceSql = ConsoleSetup.Container.Resolve<ISqlVacationService>();
 
-            service = ConsoleSetup.Container.Resolve<IApiVacationService>();
+            _serviceApi = ConsoleSetup.Container.Resolve<IApiVacationService>();
 
-            GetAndShowVacations1();
+            var vacations = GetVacationsFromApi().Result.ToList();
+
+            ShowVacationsDto(vacations);
+
+            foreach (var item in vacations)
+            {
+                if (_serviceSql.GetVacationById(item.Id) == null)
+                {
+                    _serviceSql.CreateVacation(item);
+                }
+            }
+
+            vacations = _serviceSql.GetVacation().ToList();
+
+            ShowVacationsDto(vacations);
+
+
+            //repo.Create(newVacation);
 
             //repo = ConsoleSetup.Container.Resolve<ISqlRepositoryVacation>();
 
@@ -69,11 +88,17 @@ namespace VTSClient.Test
             //GetAndShowVacations();
         }
 
-        private static async void GetAndShowVacations1()
+        private static async Task<IEnumerable<VacationDto>> GetVacationsFromApi()
         {
-            var vacationDtos = await service.GetVacationAsync();
-            ShowVacationsDto(vacationDtos.ToList());
+            var vacationDtos = await _serviceApi.GetVacationAsync();
+            return vacationDtos;
         }
+
+        //private static async void Ad()
+        //{
+        //    var vacationDtos = await _service.GetVacationAsync();
+        //    ShowVacationsDto(vacationDtos.ToList());
+        //}
         private static async void GetAndShowVacations()
         {
             var repo = new ApiRepositoryVacation();

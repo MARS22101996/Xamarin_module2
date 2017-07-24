@@ -9,12 +9,12 @@ using VTSClient.DAL.Interfaces;
 
 namespace VTSClient.DAL.Repositories
 {
-    public class RepositoryVacation : IRepositoryVacation
+    public class ApiRepositoryVacation : IApiRepositoryVacation
     {
         private readonly string _uri;
         private readonly HttpClient _httpClient;
 
-        public RepositoryVacation()
+        public ApiRepositoryVacation()
         {
             _uri = "http://localhost:5000/vts/workflow";
             _httpClient = new HttpClient();

@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Autofac;
 using VTSClient.DAL.Entities;
+using VTSClient.DAL.Interfaces;
 using VTSClient.DAL.Repositories;
 
 namespace VTSClient.Test
 {
     class Program
     {
+        private static ISqlRepositoryVacation repo;
+
         static void Main(string[] args)
         {
-            var repo = new SqlRepositoryVacation();
+            ConsoleSetup.Initialize();
+
+            repo = ConsoleSetup.Container.Resolve<ISqlRepositoryVacation>();
 
             var testId = Guid.NewGuid();
 
@@ -55,7 +61,7 @@ namespace VTSClient.Test
 
         private static async void GetAndShowVacations()
         {
-            var repo = new RepositoryVacation();
+            var repo = new ApiRepositoryVacation();
             var vacationDtos = await repo.GetAsync();
             var id = vacationDtos.ToList().First().Id;
             var vacation = await repo.GetByIdAsync(id);

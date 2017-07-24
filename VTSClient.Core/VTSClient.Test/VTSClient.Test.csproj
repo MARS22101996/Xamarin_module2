@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VTSClient.BLL\VTSClient.BLL.csproj" />
+    <ProjectReference Include="..\VTSClient.Core\VTSClient.Core.csproj" />
     <ProjectReference Include="..\VTSClient.DAL\VTSClient.DAL.csproj" />
   </ItemGroup>
 

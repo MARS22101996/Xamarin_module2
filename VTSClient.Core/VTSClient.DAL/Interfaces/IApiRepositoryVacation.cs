@@ -8,7 +8,7 @@ using VTSClient.DAL.Entities;
 
 namespace VTSClient.DAL.Interfaces
 {
-    public interface IRepositoryVacation
+    public interface IApiRepositoryVacation
     {
         Task<IEnumerable<Vacation>> GetAsync();
 

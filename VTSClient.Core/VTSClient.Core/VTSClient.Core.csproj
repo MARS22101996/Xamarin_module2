@@ -34,11 +34,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Infrastructure\Automapper\AutoMapperConfig.cs" />
+    <Compile Include="Infrastructure\Automapper\Profiles\DtoToEntityProfile.cs" />
+    <Compile Include="Infrastructure\Automapper\Profiles\EntityToDtoProfile.cs" />
+    <Compile Include="Infrastructure\DI\CoreSetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VTSClient.BLL\VTSClient.BLL.csproj">
+      <Project>{d5ea0b2a-9cf2-4fbc-a3d2-b078558b8f0c}</Project>
+      <Name>VTSClient.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VTSClient.DAL\VTSClient.DAL.csproj">
+      <Project>{5C7AFDCC-54F8-45DE-9053-A050B363CD1C}</Project>
+      <Name>VTSClient.DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

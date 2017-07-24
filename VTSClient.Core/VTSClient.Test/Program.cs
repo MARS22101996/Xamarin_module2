@@ -5,13 +5,52 @@ using System.Linq;
 using VTSClient.DAL.Entities;
 using VTSClient.DAL.Repositories;
 
-namespace VTSClient.Tests
+namespace VTSClient.Test
 {
     class Program
     {
         static void Main(string[] args)
         {
-            GetAndShowVacations();
+            var repo = new SqlRepositoryVacation();
+
+            var testId = Guid.NewGuid();
+
+            var newVacation = new Vacation
+            {
+                Id = testId,
+                CreateDate = DateTime.Now,
+                CreatedBy = "someone",
+                End = DateTime.Now.AddDays(2),
+                Start = DateTime.Now,
+                VacationStatus = 1,
+                VacationType = 1
+            };
+
+            repo.Create(newVacation);
+
+            var item = repo.GetById(newVacation.Id);
+
+            ShowVacation(item);
+
+            var vacations =  repo.GetAll();
+
+            ShowVacations(vacations.ToList());
+
+            newVacation.VacationStatus = 2;
+
+            repo.Update(newVacation);
+
+            vacations = repo.GetAll();
+
+            ShowVacations(vacations.ToList());
+
+            repo.Delete(newVacation.Id);
+
+            vacations = repo.GetAll();
+
+            ShowVacations(vacations.ToList());
+
+            //GetAndShowVacations();
         }
 
         private static async void GetAndShowVacations()
@@ -67,7 +106,7 @@ namespace VTSClient.Tests
             ShowVacations(vacationsAfterUpdate.ToList());
 
             await repo.DeleteAsync(testId);
-            
+
             var vacationsAfterDelete = await repo.GetAsync();
 
             ShowVacations(vacationsAfterDelete.ToList());
@@ -99,12 +138,12 @@ namespace VTSClient.Tests
                               $" Vacation type: {vacation.VacationType}");
         }
 
-        public string GetDatabasePath(string fileName)
-        {
-            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            string path = Path.Combine(documentsPath, fileName);
+        //public string GetDatabasePath(string fileName)
+        //{
+        //    string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        //    string path = Path.Combine(documentsPath, fileName);
 
-            return path;
-        }
+        //    return path;
+        //}
     }
 }

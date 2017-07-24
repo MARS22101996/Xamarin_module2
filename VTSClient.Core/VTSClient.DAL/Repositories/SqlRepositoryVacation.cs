@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SQLite;
-using SQLite.Net.Async;
 using VTSClient.DAL.Entities;
 using VTSClient.DAL.Interfaces;
 
 namespace VTSClient.DAL.Repositories
 {
-    public class SqlRepositoryVacation : ISqlRepositoryVacation
+    public class SqlRepositoryVacation : ISqlRepositoryVacation, IDisposable
     {
-        private readonly SQLiteConnection _context;
+        private  SQLiteConnection _context;
 
-        public SqlRepositoryVacation(IDbLocation dbLocation)
+        public SqlRepositoryVacation()
         {
-            _context = new SQLiteConnection(dbLocation.GetDatabasePath(DalSettings.DbName));
+            _context = new SQLiteConnection("C:\\sql\\" + DalSettings.DbName);
+            _context.CreateTable<Vacation>();
         }
 
-        public  IEnumerable<Vacation> GetAll()
+        public IEnumerable<Vacation> GetAll()
         {
             return _context.Table<Vacation>().ToList();
         }
@@ -44,7 +41,21 @@ namespace VTSClient.DAL.Repositories
 
         public void Update(Vacation item)
         {
-            _context.Insert(item);
+            _context.Update(item);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing) return;
+            if (_context == null) return;
+            _context.Dispose();
+            _context = null;
         }
     }
 }

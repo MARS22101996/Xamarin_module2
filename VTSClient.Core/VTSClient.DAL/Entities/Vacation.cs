@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SQLite;
 
 namespace VTSClient.DAL.Entities
 {
+    [Table("Vacation")]
     public class Vacation 
     {
+        [PrimaryKey]
         public Guid Id { get; set; }
 
         public DateTime Start { get; set; }

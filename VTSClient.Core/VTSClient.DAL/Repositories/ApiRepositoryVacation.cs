@@ -38,6 +38,7 @@ namespace VTSClient.DAL.Repositories
             var contentJObject = await GetRequestAsync(uri);
 
             if (contentJObject == null) return null;
+
             var contentJToken = contentJObject.SelectToken(@"$.itemResult");
 
             var entity = JsonConvert.DeserializeObject<Vacation>(contentJToken.ToString());
@@ -56,13 +57,10 @@ namespace VTSClient.DAL.Repositories
 
             request.Headers.Add("Accept", "application/json");
 
-            request.Headers.Add("token", "d97b97e0-b73d-4534-8cf2-3ae80bd3f1e6");
+            var response = await _httpClient.SendAsync(request);
 
-            var response1 = _httpClient.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
 
-            var res = response1.Result;
-
-            var content = await res.Content.ReadAsStringAsync();
             var contentJObje = JObject.Parse(content);
 
             return contentJObje;
@@ -87,15 +85,16 @@ namespace VTSClient.DAL.Repositories
                 Method = HttpMethod.Delete
             };
 
-            HttpResponseMessage response = _httpClient.SendAsync(request).Result;
+            var response = await  _httpClient.SendAsync(request);
 
             return await IsRequestSucceed(response);
         }
 
         private async Task<bool> CreateOrUpdateAsync(Vacation entity, HttpMethod httpMethod)
         {
-            string entityJson = JsonConvert.SerializeObject(entity);
-            HttpContent content = new StringContent(entityJson);
+            var entityJson = JsonConvert.SerializeObject(entity);
+
+            var content = new StringContent(entityJson);
 
             var request = new HttpRequestMessage
             {
@@ -104,7 +103,7 @@ namespace VTSClient.DAL.Repositories
                 Content = content
             };
 
-            HttpResponseMessage response = _httpClient.SendAsync(request).Result;
+            var response = await _httpClient.SendAsync(request);
 
             return await IsRequestSucceed(response);
         }
@@ -112,7 +111,9 @@ namespace VTSClient.DAL.Repositories
         private async Task<bool> IsRequestSucceed(HttpResponseMessage response)
         {
             var content = await response.Content.ReadAsStringAsync();
+
             var result = JObject.Parse(content).SelectToken(@"$.resultCode").ToString();
+
             var resultCode = Convert.ToInt16(result);
 
             return resultCode == 0;

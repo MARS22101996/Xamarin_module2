@@ -23,6 +23,7 @@ namespace VTSClient.BLL.Services
         public async Task<IEnumerable<VacationDto>> GetVacationAsync()
         {
             var vacations = await _vacationRepository.GetAsync();
+
             var vacationDtos = Mapper.Map<IEnumerable<VacationDto>>(vacations);
 
             return vacationDtos;
@@ -31,6 +32,7 @@ namespace VTSClient.BLL.Services
         public async Task<VacationDto> GetVacationByIdAsync(Guid id)
         {
             var vacation = await _vacationRepository.GetByIdAsync(id);
+
             var vacationDto = Mapper.Map<VacationDto>(vacation);
 
             return vacationDto;

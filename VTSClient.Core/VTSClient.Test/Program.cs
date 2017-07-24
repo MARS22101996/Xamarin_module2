@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Autofac;
 using VTSClient.BLL.Dto;
@@ -18,16 +19,6 @@ namespace VTSClient.Test
 
             SetUpContainers();
 
-            var vacations = _serviceApi.GetVacationAsync().Result.ToList();
-
-            ShowVacationsDto(vacations, "List of vacations Requests from the server.");
-
-            CreateListOfVacationsInSql(vacations);
-
-            vacations = _serviceSql.GetVacation().ToList();
-
-            ShowVacationsDto(vacations, "List of vacations from the db after adding from the server.");
-
             var id = Guid.NewGuid();
 
             var newVacation = GenerateNewVacation(id);
@@ -36,13 +27,23 @@ namespace VTSClient.Test
 
             _serviceApi.CreateVacationAsync(newVacation);
 
-            vacations = _serviceSql.GetVacation().ToList();
+            var vacations = _serviceApi.GetVacationAsync().Result.ToList();
 
             ShowVacationsDto(vacations, "List of vacations requests from the server after adding the new vacation.");
 
-            var vacationsApi =  _serviceApi.GetVacationAsync().Result.ToList();
+            vacations = _serviceSql.GetVacation().ToList();
 
-            ShowVacationsDto(vacationsApi, "List of vacations from the db after after adding the new vacation.");
+            ShowVacationsDto(vacations, "List of vacations from the db after after adding the new vacation.");
+
+            vacations = _serviceApi.GetVacationAsync().Result.ToList();
+
+            ShowVacationsDto(vacations, "List of vacations Requests from the server.");
+
+            CreateListOfVacationsInSql(vacations);
+
+            vacations = _serviceSql.GetVacation().ToList();
+
+            ShowVacationsDto(vacations, "List of vacations from the db after adding from the server.");
 
         }
 
@@ -59,10 +60,10 @@ namespace VTSClient.Test
         {
             foreach (var item in vacations)
             {
-                if (_serviceSql.GetVacationById(item.Id) == null)
-                {
+                //if (_serviceSql.GetVacationById(item.Id) == null)
+                //{
                     _serviceSql.CreateVacation(item);
-                }
+                //}
             }
         }
 

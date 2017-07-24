@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DalSettings.cs" />
+    <Compile Include="DbNameSettings.cs" />
     <Compile Include="Entities\Vacation.cs" />
     <Compile Include="IDbLocation.cs" />
     <Compile Include="Interfaces\IApiRepositoryVacation.cs" />

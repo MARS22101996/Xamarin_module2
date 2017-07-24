@@ -11,15 +11,16 @@ namespace VTSClient.DAL.Repositories
     {
         private  SQLiteConnection _context;
 
-        public SqlRepositoryVacation()
+        public SqlRepositoryVacation(IDbLocation dbLocation)
         {
-            _context = new SQLiteConnection("C:\\sql\\" + DalSettings.DbName);
+            _context = new SQLiteConnection(dbLocation.GetDatabasePath(DbNameSettings.DbName));
+
             _context.CreateTable<Vacation>();
         }
 
         public IEnumerable<Vacation> GetAll()
         {
-            return _context.Table<Vacation>().ToList();
+            return _context.Table<Vacation>();
         }
 
         public Vacation GetById(Guid id)

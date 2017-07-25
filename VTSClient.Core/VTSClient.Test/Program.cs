@@ -88,8 +88,8 @@ namespace VTSClient.Test
                 CreatedBy = "new-vacation",
                 End = DateTime.Now.AddDays(2),
                 Start = DateTime.Now,
-                VacationStatus = 1,
-                VacationType = 1
+                VacationStatus = 4,
+                VacationType = 4
             };
             return newVacation;
         }

@@ -10,10 +10,10 @@ using VTSClient.DAL.Interfaces;
 
 namespace VTSClient.DAL.Repositories
 {
-    public class ApiRepositoryVacation : IApiRepositoryVacation
+    public class ApiRepositoryVacation : IApiRepositoryVacation, IDisposable
     {
         private readonly string _uri;
-        private readonly HttpClient _httpClient;
+        private HttpClient _httpClient;
 
         public ApiRepositoryVacation(IServerUrl url)
         {
@@ -118,6 +118,20 @@ namespace VTSClient.DAL.Repositories
             var resultCode = Convert.ToInt16(result);
 
             return resultCode == 0;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing) return;
+            if (_httpClient == null) return;
+            _httpClient.Dispose();
+            _httpClient = null;
         }
     }
 }

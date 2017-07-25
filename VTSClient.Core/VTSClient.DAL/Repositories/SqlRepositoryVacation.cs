@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SQLite;
 using VTSClient.DAL.Entities;
 using VTSClient.DAL.Infrastructure;

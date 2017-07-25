@@ -1,4 +1,4 @@
-﻿namespace VTSClient.DAL
+﻿namespace VTSClient.DAL.Infrastructure
 {
     public class DbNameSettings
     {

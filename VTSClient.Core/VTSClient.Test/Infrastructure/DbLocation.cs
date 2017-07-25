@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using VTSClient.DAL;
+﻿using System.IO;
+using VTSClient.DAL.Infrastructure;
 
-namespace VTSClient.Test
+namespace VTSClient.Test.Infrastructure
 {
     public class DbLocation : IDbLocation
     {

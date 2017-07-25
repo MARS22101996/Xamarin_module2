@@ -5,6 +5,7 @@ using System.Linq;
 using Autofac;
 using VTSClient.BLL.Dto;
 using VTSClient.BLL.Interfaces;
+using VTSClient.Test.Infrastructure;
 
 namespace VTSClient.Test
 {

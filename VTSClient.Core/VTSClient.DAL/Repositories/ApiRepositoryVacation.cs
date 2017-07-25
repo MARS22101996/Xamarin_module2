@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VTSClient.DAL.Entities;
+using VTSClient.DAL.Infrastructure;
 using VTSClient.DAL.Interfaces;
 
 namespace VTSClient.DAL.Repositories
@@ -14,9 +15,9 @@ namespace VTSClient.DAL.Repositories
         private readonly string _uri;
         private readonly HttpClient _httpClient;
 
-        public ApiRepositoryVacation()
+        public ApiRepositoryVacation(IServerUrl url)
         {
-            _uri = "http://localhost:5000/vts/workflow";
+            _uri = url.GetServerUrl();
             _httpClient = new HttpClient();
         }
 

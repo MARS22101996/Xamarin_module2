@@ -34,9 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DbNameSettings.cs" />
+    <Compile Include="Infrastructure\DbNameSettings.cs" />
     <Compile Include="Entities\Vacation.cs" />
-    <Compile Include="IDbLocation.cs" />
+    <Compile Include="Infrastructure\IDbLocation.cs" />
+    <Compile Include="Infrastructure\IServerUrl.cs" />
     <Compile Include="Interfaces\IApiRepositoryVacation.cs" />
     <Compile Include="Interfaces\ISqlRepositoryVacation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

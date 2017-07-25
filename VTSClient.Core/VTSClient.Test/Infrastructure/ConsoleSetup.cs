@@ -1,10 +1,8 @@
 ﻿using Autofac;
 using VTSClient.Core.Infrastructure.DI;
-using VTSClient.DAL;
-using VTSClient.DAL.Interfaces;
-using VTSClient.DAL.Repositories;
+using VTSClient.DAL.Infrastructure;
 
-namespace VTSClient.Test
+namespace VTSClient.Test.Infrastructure
 {
     public static class ConsoleSetup
     {
@@ -16,6 +14,9 @@ namespace VTSClient.Test
 
             builder.RegisterInstance(new DbLocation())
                 .As<IDbLocation>();
+
+            builder.RegisterInstance(new ServerUrl())
+                .As<IServerUrl>();
 
             CoreSetup.Init(builder);
 

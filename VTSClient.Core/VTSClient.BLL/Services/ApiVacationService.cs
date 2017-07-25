@@ -26,7 +26,7 @@ namespace VTSClient.BLL.Services
 
             var vacationDtos = Mapper.Map<IEnumerable<VacationDto>>(vacations);
 
-            return vacationDtos;
+            return vacationDtos.ToList();
         }
 
         public async Task<VacationDto> GetVacationByIdAsync(Guid id)

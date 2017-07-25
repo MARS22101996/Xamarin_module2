@@ -13,8 +13,6 @@ namespace VTSClient.Core.Infrastructure.DI
         {
             containerBuilder.Register(x => new ApiRepositoryVacation()).As<IApiRepositoryVacation>();
 
-            //containerBuilder.Register(x => new SqlRepositoryVacation()).As<ISqlRepositoryVacation>();
-
             containerBuilder.RegisterType<SqlRepositoryVacation>().As<ISqlRepositoryVacation>();
 
             containerBuilder.RegisterType<SqlVacationService>().As<ISqlVacationService>();

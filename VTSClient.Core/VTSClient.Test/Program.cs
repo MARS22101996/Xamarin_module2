@@ -14,37 +14,15 @@ namespace VTSClient.Test
 
         private static IApiVacationService _serviceApi;
 
+        private static IEnumerable<VacationDto> _vacations;
+
         static void Main(string[] args)
         {
-
             SetUpContainers();
 
-            var id = Guid.NewGuid();
+            RetrievesVacationsFromTheServerAndStoresInTheDb();
 
-            var newVacation = GenerateNewVacation(id);
-
-            _serviceSql.CreateVacation(newVacation);
-
-            _serviceApi.CreateVacationAsync(newVacation);
-
-            var vacations = _serviceApi.GetVacationAsync().Result.ToList();
-
-            ShowVacationsDto(vacations, "List of vacations requests from the server after adding the new vacation.");
-
-            vacations = _serviceSql.GetVacation().ToList();
-
-            ShowVacationsDto(vacations, "List of vacations from the db after after adding the new vacation.");
-
-            vacations = _serviceApi.GetVacationAsync().Result.ToList();
-
-            ShowVacationsDto(vacations, "List of vacations Requests from the server.");
-
-            CreateListOfVacationsInSql(vacations);
-
-            vacations = _serviceSql.GetVacation().ToList();
-
-            ShowVacationsDto(vacations, "List of vacations from the db after adding from the server.");
-
+            StoresVacationInTheDbAndUploadstoTheServer();
         }
 
         private static void SetUpContainers()
@@ -56,14 +34,47 @@ namespace VTSClient.Test
             _serviceApi = ConsoleSetup.Container.Resolve<IApiVacationService>();
         }
 
-        private static void CreateListOfVacationsInSql(List<VacationDto> vacations)
+        private static void RetrievesVacationsFromTheServerAndStoresInTheDb()
         {
+            _vacations = _serviceApi.GetVacationAsync().Result.ToList();
+
+            ShowVacationsDto(_vacations, "List of vacations Requests from the server.");
+
+            CreateListOfVacationsInSql(_vacations);
+
+            _vacations = _serviceSql.GetVacation();
+
+            ShowVacationsDto(_vacations, "List of vacations from the db after adding from the server.");
+        }
+
+        private static void StoresVacationInTheDbAndUploadstoTheServer()
+        {
+            var id = Guid.NewGuid();
+
+            var newVacation = GenerateNewVacation(id);
+
+            _serviceSql.CreateVacation(newVacation);
+
+            _serviceApi.CreateVacationAsync(newVacation);
+
+            _vacations = _serviceApi.GetVacationAsync().Result;
+
+            ShowVacationsDto(_vacations, "List of vacations requests from the server after adding the new vacation.");
+
+            _vacations = _serviceSql.GetVacation().ToList();
+
+            ShowVacationsDto(_vacations, "List of vacations from the db after after adding the new vacation.");
+        }
+
+        private static void CreateListOfVacationsInSql(IEnumerable<VacationDto> vacations)
+        {
+            var existedVacations = _serviceSql.GetVacation().ToList();
             foreach (var item in vacations)
             {
-                //if (_serviceSql.GetVacationById(item.Id) == null)
-                //{
+                if (existedVacations.FirstOrDefault(x => x.Id == item.Id)==null)
+                {
                     _serviceSql.CreateVacation(item);
-                //}
+                }
             }
         }
 
@@ -73,7 +84,7 @@ namespace VTSClient.Test
             {
                 Id = id,
                 CreateDate = DateTime.Now,
-                CreatedBy = "test",
+                CreatedBy = "new-vacation",
                 End = DateTime.Now.AddDays(2),
                 Start = DateTime.Now,
                 VacationStatus = 1,
@@ -82,7 +93,7 @@ namespace VTSClient.Test
             return newVacation;
         }
 
-        private static void ShowVacationsDto(List<VacationDto> vacations, string message)
+        private static void ShowVacationsDto(IEnumerable<VacationDto> vacations, string message)
         {
             if (vacations == null) throw new ArgumentNullException(nameof(vacations));
             Console.WriteLine(message);

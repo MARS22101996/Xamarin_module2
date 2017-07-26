@@ -13,17 +13,19 @@ namespace VTSClient.BLL.Services
     public class ApiVacationService : IApiVacationService
     {
         private readonly IApiRepositoryVacation _vacationRepository;
+        private readonly IMapper _mapper;
 
-        public ApiVacationService(IApiRepositoryVacation vacationRepository)
+        public ApiVacationService(IApiRepositoryVacation vacationRepository, IMapper mapper)
         {
             _vacationRepository = vacationRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<VacationDto>> GetVacationAsync()
         {
             var vacations = await _vacationRepository.GetAsync();
 
-            var vacationDtos = Mapper.Map<IEnumerable<VacationDto>>(vacations);
+            var vacationDtos = _mapper.Map<IEnumerable<VacationDto>>(vacations);
 
             return vacationDtos.ToList();
         }
@@ -32,21 +34,21 @@ namespace VTSClient.BLL.Services
         {
             var vacation = await _vacationRepository.GetByIdAsync(id);
 
-            var vacationDto = Mapper.Map<VacationDto>(vacation);
+            var vacationDto = _mapper.Map<VacationDto>(vacation);
 
             return vacationDto;
         }
 
         public Task<bool> CreateVacationAsync(VacationDto entity)
         {
-            var vacation = Mapper.Map<Vacation>(entity);
+            var vacation = _mapper.Map<Vacation>(entity);
 
             return _vacationRepository.CreateAsync(vacation);
         }
 
         public Task<bool> UpdateVacationAsync(VacationDto entity)
         {
-            var vacation = Mapper.Map<Vacation>(entity);
+            var vacation = _mapper.Map<Vacation>(entity);
 
             return _vacationRepository.UpdateAsync(vacation);
         }

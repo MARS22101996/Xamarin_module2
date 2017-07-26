@@ -11,17 +11,19 @@ namespace VTSClient.BLL.Services
     public class SqlVacationService : ISqlVacationService
     {
         private readonly ISqlRepositoryVacation _vacationRepository;
+        private readonly IMapper _mapper;
 
-        public SqlVacationService(ISqlRepositoryVacation vacationRepository)
+        public SqlVacationService(ISqlRepositoryVacation vacationRepository, IMapper mapper)
         {
             _vacationRepository = vacationRepository;
+            _mapper = mapper;
         }
 
         public IEnumerable<VacationDto> GetVacation()
         {
             var vacations = _vacationRepository.GetAll();
 
-            var vacationDtos = Mapper.Map<IEnumerable<VacationDto>>(vacations);
+            var vacationDtos = _mapper.Map<IEnumerable<VacationDto>>(vacations);
 
             return vacationDtos;
         }
@@ -30,21 +32,21 @@ namespace VTSClient.BLL.Services
         {
             var vacation = _vacationRepository.GetById(id);
 
-            var vacationDto = Mapper.Map<VacationDto>(vacation);
+            var vacationDto = _mapper.Map<VacationDto>(vacation);
 
             return vacationDto;
         }
 
         public void CreateVacation(VacationDto entity)
         {
-            var vacation = Mapper.Map<Vacation>(entity);
+            var vacation = _mapper.Map<Vacation>(entity);
 
             _vacationRepository.Create(vacation);
         }
 
         public void UpdateVacation(VacationDto entity)
         {
-            var vacation = Mapper.Map<Vacation>(entity);
+            var vacation = _mapper.Map<Vacation>(entity);
 
             _vacationRepository.Update(vacation);
         }

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using SQLite;
 using VTSClient.DAL.Entities;
 using VTSClient.DAL.Infrastructure;
@@ -7,28 +10,28 @@ using VTSClient.DAL.Interfaces;
 
 namespace VTSClient.DAL.Repositories
 {
-    public class SqlRepositoryVacation : ISqlRepositoryVacation, IDisposable
+    public class CommonSqlRepository<TEntity> : ISqlRepository<TEntity> where TEntity : class, new()
     {
-        private  SQLiteConnection _context;
+        private SQLiteConnection _context;
 
-        public SqlRepositoryVacation(IDbLocation dbLocation)
+        public CommonSqlRepository(IDbLocation dbLocation)
         {
             _context = new SQLiteConnection(dbLocation.GetDatabasePath(DbNameSettings.DbName));
 
-            _context.CreateTable<Vacation>();
+            _context.CreateTable<TEntity>();
         }
 
-        public IEnumerable<Vacation> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
-            return _context.Table<Vacation>();
+            return _context.Table<TEntity>();
         }
 
-        public Vacation GetById(Guid id)
+        public TEntity GetById(Guid id)
         {
-            return _context.Get<Vacation>(id);
+            return _context.Get<TEntity>(id);
         }
 
-        public void Create(Vacation item)
+        public void Create(TEntity item)
         {
             _context.Insert(item);
         }
@@ -40,7 +43,7 @@ namespace VTSClient.DAL.Repositories
             _context.Delete(item);
         }
 
-        public void Update(Vacation item)
+        public void Update(TEntity item)
         {
             _context.Update(item);
         }

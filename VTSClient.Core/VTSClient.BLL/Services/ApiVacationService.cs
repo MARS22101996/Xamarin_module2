@@ -12,10 +12,10 @@ namespace VTSClient.BLL.Services
 {
     public class ApiVacationService : IApiVacationService
     {
-        private readonly IApiRepositoryVacation _vacationRepository;
+        private readonly IApiRepository<Vacation> _vacationRepository;
         private readonly IMapper _mapper;
 
-        public ApiVacationService(IApiRepositoryVacation vacationRepository, IMapper mapper)
+        public ApiVacationService(IApiRepository<Vacation> vacationRepository, IMapper mapper)
         {
             _vacationRepository = vacationRepository;
             _mapper = mapper;

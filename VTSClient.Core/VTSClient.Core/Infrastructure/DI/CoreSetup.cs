@@ -29,13 +29,17 @@ namespace VTSClient.Core.Infrastructure.DI
                 .As<IMapper>()
                 .InstancePerLifetimeScope();
 
-            containerBuilder.RegisterType<ApiRepositoryVacation>().As<IApiRepositoryVacation>();
-
-            containerBuilder.RegisterType<SqlRepositoryVacation>().As<ISqlRepositoryVacation>();
-
             containerBuilder.RegisterType<SqlVacationService>().As<ISqlVacationService>();
 
             containerBuilder.RegisterType<ApiVacationService>().As<IApiVacationService>();
+
+            containerBuilder.RegisterGeneric(typeof(CommonApiRepository<>))
+                .As(typeof(IApiRepository<>))
+                .InstancePerDependency();
+
+            containerBuilder.RegisterGeneric(typeof(CommonSqlRepository<>))
+                .As(typeof(ISqlRepository<>))
+                .InstancePerDependency();
 
             AutoMapperCoreConfiguration.Configure();
         }

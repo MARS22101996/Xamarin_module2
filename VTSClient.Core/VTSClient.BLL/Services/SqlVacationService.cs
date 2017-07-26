@@ -10,10 +10,10 @@ namespace VTSClient.BLL.Services
 {
     public class SqlVacationService : ISqlVacationService
     {
-        private readonly ISqlRepositoryVacation _vacationRepository;
+        private readonly ISqlRepository<Vacation>  _vacationRepository;
         private readonly IMapper _mapper;
 
-        public SqlVacationService(ISqlRepositoryVacation vacationRepository, IMapper mapper)
+        public SqlVacationService(ISqlRepository<Vacation> vacationRepository, IMapper mapper)
         {
             _vacationRepository = vacationRepository;
             _mapper = mapper;

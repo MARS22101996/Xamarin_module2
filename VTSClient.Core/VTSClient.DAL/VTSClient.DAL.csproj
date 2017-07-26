@@ -38,11 +38,11 @@
     <Compile Include="Entities\Vacation.cs" />
     <Compile Include="Infrastructure\IDbLocation.cs" />
     <Compile Include="Infrastructure\IServerUrl.cs" />
-    <Compile Include="Interfaces\IApiRepositoryVacation.cs" />
-    <Compile Include="Interfaces\ISqlRepositoryVacation.cs" />
+    <Compile Include="Interfaces\IApiRepository.cs" />
+    <Compile Include="Interfaces\ISqlRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ApiRepositoryVacation.cs" />
-    <Compile Include="Repositories\SqlRepositoryVacation.cs" />
+    <Compile Include="Repositories\CommonApiRepository.cs" />
+    <Compile Include="Repositories\CommonSqlRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

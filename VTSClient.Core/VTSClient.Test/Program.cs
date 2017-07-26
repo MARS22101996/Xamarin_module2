@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Autofac;
 using VTSClient.BLL.Dto;
 using VTSClient.BLL.Interfaces;
-using VTSClient.Core.Infrastructure.Automapper;
 using VTSClient.Test.Infrastructure;
 
 namespace VTSClient.Test

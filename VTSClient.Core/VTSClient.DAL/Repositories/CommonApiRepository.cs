@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,29 +12,29 @@ using VTSClient.DAL.Interfaces;
 
 namespace VTSClient.DAL.Repositories
 {
-    public class ApiRepositoryVacation : IApiRepositoryVacation, IDisposable
+    public class CommonApiRepository<TEntity> : IApiRepository<TEntity> where TEntity : class
     {
         private readonly string _uri;
         private HttpClient _httpClient;
 
-        public ApiRepositoryVacation(IServerUrl url)
+        public CommonApiRepository(IServerUrl url)
         {
             _uri = url.GetServerUrl();
             _httpClient = new HttpClient();
         }
 
-        public async Task<IEnumerable<Vacation>> GetAsync()
+        public async Task<IEnumerable<TEntity>> GetAsync()
         {
             var contentJObject = await GetRequestAsync(_uri);
 
             var contentJToken = contentJObject.SelectToken(@"$.listResult");
 
-            var entities = JsonConvert.DeserializeObject<IEnumerable<Vacation>>(contentJToken.ToString());
+            var entities = JsonConvert.DeserializeObject<IEnumerable<TEntity>>(contentJToken.ToString());
 
             return entities;
         }
 
-        public async Task<Vacation> GetByIdAsync(Guid id)
+        public async Task<TEntity> GetByIdAsync(Guid id)
         {
             var uri = $"{_uri}/{id}";
 
@@ -42,7 +44,7 @@ namespace VTSClient.DAL.Repositories
 
             var contentJToken = contentJObject.SelectToken(@"$.itemResult");
 
-            var entity = JsonConvert.DeserializeObject<Vacation>(contentJToken.ToString());
+            var entity = JsonConvert.DeserializeObject<TEntity>(contentJToken.ToString());
 
             return entity;
         }
@@ -68,12 +70,12 @@ namespace VTSClient.DAL.Repositories
         }
 
 
-        public Task<bool> CreateAsync(Vacation entity)
+        public Task<bool> CreateAsync(TEntity entity)
         {
             return CreateOrUpdateAsync(entity, HttpMethod.Put);
         }
 
-        public Task<bool> UpdateAsync(Vacation entity)
+        public Task<bool> UpdateAsync(TEntity entity)
         {
             return CreateOrUpdateAsync(entity, HttpMethod.Put);
         }
@@ -86,12 +88,12 @@ namespace VTSClient.DAL.Repositories
                 Method = HttpMethod.Delete
             };
 
-            var response = await  _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
 
             return await IsRequestSucceed(response);
         }
 
-        private async Task<bool> CreateOrUpdateAsync(Vacation entity, HttpMethod httpMethod)
+        private async Task<bool> CreateOrUpdateAsync(TEntity entity, HttpMethod httpMethod)
         {
             var entityJson = JsonConvert.SerializeObject(entity);
 
